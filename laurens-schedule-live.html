@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lauren's Support Schedule 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:     #1a3a6b;
+  --orange:   #d96a1a;
+  --teal:     #2e7d72;
+  --light:    #f0f4f9;
+  --white:    #ffffff;
+  --text:     #1e2d3d;
+  --muted:    #6b7a8d;
+  --border:   #d8e2ee;
+  --ihss-bg:  #dbeafe;  --ihss-tx: #1e3a8a;  --ihss-dot: #3b82f6;
+  --fcsn-bg:  #d1fae5;  --fcsn-tx: #065f46;  --fcsn-dot: #10b981;
+  --mac-bg:   #fef3c7;  --mac-tx:  #78350f;  --mac-dot:  #f59e0b;
+  --mom-bg:   #e0f7f7;  --mom-tx:  #0e6b6b;  --mom-dot:  #2abfbf;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:var(--light);color:var(--text)}
+
+/* HEADER */
+header{background:var(--navy);color:#fff;padding:1.3rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.hd-title h1{font-family:'Playfair Display',serif;font-size:1.5rem}
+.hd-title p{font-size:.82rem;color:#9ab3d0;margin-top:.15rem}
+.hd-meta{font-size:.73rem;color:#6e93b8;text-align:right;line-height:1.6}
+.hd-meta b{color:#a8c8e8}
+
+/* LEGEND */
+.legend{background:var(--white);border-bottom:1px solid var(--border);padding:.6rem 2rem;display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap}
+.leg-lbl{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.leg-item{display:flex;align-items:center;gap:.35rem;font-size:.79rem;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.di{background:var(--ihss-dot)}.df{background:var(--fcsn-dot)}.dm{background:var(--mac-dot)}.dmo{background:var(--mom-dot)}
+
+/* MONTH NAV */
+.mnav{background:var(--white);border-bottom:2px solid var(--border);padding:.5rem 2rem;display:flex;align-items:center;gap:.4rem;overflow-x:auto;position:sticky;top:0;z-index:10}
+.mbtn{border:none;cursor:pointer;border-radius:20px;padding:.28rem .82rem;font-size:.79rem;font-weight:600;background:var(--light);color:var(--muted);transition:all .15s;white-space:nowrap;font-family:inherit}
+.mbtn:hover{background:#dce8f5;color:var(--navy)}
+.mbtn.active{background:var(--navy);color:#fff}
+
+/* CALENDAR */
+.cal-wrap{padding:1.4rem 2rem 3rem;max-width:1200px;margin:0 auto}
+.month-sec{margin-bottom:2.5rem}
+.month-h{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:.85rem;border-left:4px solid var(--orange);padding-left:.7rem}
+.week-hdr,.week-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}
+.dh{text-align:center;font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:.22rem 0}
+
+/* DAY CELL */
+.dc{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.42rem .48rem .5rem;min-height:130px;transition:box-shadow .12s;vertical-align:top}
+.dc:hover{box-shadow:0 2px 10px rgba(26,58,107,.1)}
+.dc.today{border-color:var(--orange);box-shadow:0 0 0 2px rgba(217,106,26,.18)}
+.dc.empty{background:transparent;border-color:transparent;pointer-events:none;min-height:0}
+.dc.quiet{background:#fafbfd}
+
+.dnum{font-size:.77rem;font-weight:700;color:var(--navy);margin-bottom:.3rem;display:flex;align-items:center;gap:.3rem}
+.today-badge{background:var(--orange);color:#fff;border-radius:10px;padding:.03rem .4rem;font-size:.6rem;font-weight:700;letter-spacing:.04em}
+
+/* PILL — time on top, indented name+label below */
+.pill{border-radius:6px;padding:.22rem .44rem .26rem;margin-bottom:.22rem;font-size:.69rem;line-height:1.3}
+.pill .pill-time{font-weight:700;display:block;margin-bottom:.1rem}
+.pill .pill-who{display:block;padding-left:.6rem;font-weight:600;opacity:.9}
+.pill .pill-who .pill-label{font-weight:400;font-size:.63rem;opacity:.8;margin-left:.25rem}
+.pill.ihss{background:var(--ihss-bg);color:var(--ihss-tx)}
+.pill.fcsn{background:var(--fcsn-bg);color:var(--fcsn-tx)}
+.pill.mac {background:var(--mac-bg); color:var(--mac-tx)}
+.pill.mom {background:var(--mom-bg); color:var(--mom-tx)}
+
+/* STATUS */
+#statusMsg{display:flex;align-items:center;justify-content:center;padding:4rem 2rem;font-size:1rem;color:var(--muted);gap:.75rem}
+.spinner{width:22px;height:22px;border:3px solid #dce3ed;border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESPONSIVE */
+@media(max-width:700px){header,.legend,.mnav,.cal-wrap{padding-left:1rem;padding-right:1rem}.dc{min-height:100px}.pill{font-size:.63rem}}
+@media(max-width:480px){.week-hdr,.week-row{gap:3px}.dc{padding:.3rem .28rem;min-height:80px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-title">
+    <h1>Lauren's Support Schedule</h1>
+    <p>2026 &nbsp;·&nbsp; Paty &nbsp;·&nbsp; Cathy &nbsp;·&nbsp; Michael &nbsp;·&nbsp; MAC &nbsp;·&nbsp; Mom</p>
+  </div>
+  <div class="hd-meta" id="hdMeta">Loading…</div>
+</header>
+
+<div class="legend">
+  <span class="leg-lbl">Shift type</span>
+  <span class="leg-item"><span class="dot di"></span>IHSS</span>
+  <span class="leg-item"><span class="dot df"></span>FCSN</span>
+  <span class="leg-item"><span class="dot dm"></span>MAC / Daytime</span>
+  <span class="leg-item"><span class="dot dmo"></span>Mom</span>
+</div>
+
+<nav class="mnav" id="mNav"></nav>
+
+<div id="statusMsg"><div class="spinner"></div>&nbsp;Loading live schedule…</div>
+<main class="cal-wrap" id="calWrap" style="display:none"></main>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIGURATION
+//  After publishing your sheet (File → Share → Publish
+//  to web → Sheet "2026" → CSV), paste the URL below.
+// ═══════════════════════════════════════════════════════
+const SHEET_ID  = '122_FlMDoNBNTtXFYyz1_MdpM0_4MmSO-';
+const SHEET_GID = '991178498';   // The gid= number for the "2026" tab
+// Fetches via: https://docs.google.com/spreadsheets/d/{ID}/export?format=csv&gid={GID}
+
+// ═══════════════════════════════════════════════════════
+//  COLUMN MAP (0-indexed, matches your spreadsheet)
+// ═══════════════════════════════════════════════════════
+const COL = {
+  date:           3,
+  patyIHSSstart:  7,  patyIHSSend:    8,
+  patyFCSNstart: 11,  patyFCSNend:   12,
+  cathyIHSSstart:17,  cathyIHSSend:  18,
+  cathyFCSNstart:21,  cathyFCSNend:  22,
+  michFCSNstart: 26,  michFCSNend:   27,
+  macStart:      34,  macEnd:        35,
+};
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+const DOWS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+// ── Time helpers ────────────────────────────────────────
+function parseTime(raw) {
+  // raw may be "HH:MM:SS", "H:MM AM/PM", datetime string, or empty
+  if (!raw || !raw.trim()) return null;
+  raw = raw.trim();
+
+  // "HH:MM:SS" 24-hr format (from CSV export of time values)
+  let m = raw.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+  if (m) {
+    let h = parseInt(m[1]), mi = parseInt(m[2]);
+    return { h, mi, min: h * 60 + mi };
+  }
+  // "H:MM AM/PM"
+  m = raw.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (m) {
+    let h = parseInt(m[1]), mi = parseInt(m[2]), ap = m[3].toUpperCase();
+    if (ap === 'AM' && h === 12) h = 0;
+    if (ap === 'PM' && h !== 12) h += 12;
+    return { h, mi, min: h * 60 + mi };
+  }
+  // datetime string like "1900-01-01 04:30:00" — take time part
+  m = raw.match(/\d{4}-\d{2}-\d{2}[T ](\d{2}):(\d{2})/);
+  if (m) {
+    let h = parseInt(m[1]), mi = parseInt(m[2]);
+    return { h, mi, min: h * 60 + mi };
+  }
+  return null;
+}
+
+function fmtTime(t) {
+  if (!t) return '';
+  let h = t.h, mi = t.mi;
+  const ap = h < 12 ? 'AM' : 'PM';
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(mi).padStart(2,'0')} ${ap}`;
+}
+
+function minToFmt(m) {
+  m = ((m % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60), mi = m % 60;
+  const ap = h < 12 ? 'AM' : 'PM';
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(mi).padStart(2,'0')} ${ap}`;
+}
+
+// ── CSV parser ──────────────────────────────────────────
+function parseCSV(text) {
+  const rows = [];
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    const row = []; let cur = '', inQ = false;
+    for (const ch of line) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+      else cur += ch;
+    }
+    row.push(cur.trim());
+    rows.push(row);
+  }
+  return rows;
+}
+
+// ── Build shift list for one CSV row ───────────────────
+function buildShifts(row) {
+  const raw = [];
+
+  function tryAdd(worker, type, sc, ec) {
+    const s = parseTime(row[sc]);
+    const e = parseTime(row[ec]);
+    if (s && e) raw.push({ worker, type, startMin: s.min, endMin: e.min,
+                            startFmt: fmtTime(s), endFmt: fmtTime(e) });
+  }
+
+  tryAdd('Paty',    'ihss', COL.patyIHSSstart,  COL.patyIHSSend);
+  tryAdd('Paty',    'fcsn', COL.patyFCSNstart,  COL.patyFCSNend);
+  tryAdd('Cathy',   'ihss', COL.cathyIHSSstart, COL.cathyIHSSend);
+  tryAdd('Cathy',   'fcsn', COL.cathyFCSNstart, COL.cathyFCSNend);
+  tryAdd('Michael', 'fcsn', COL.michFCSNstart,  COL.michFCSNend);
+  tryAdd('MAC',     'mac',  COL.macStart,        COL.macEnd);
+
+  // Build covered-minutes set (handle midnight-crossing shifts)
+  const covered = new Uint8Array(1440);
+  for (const s of raw) {
+    if (s.endMin <= s.startMin) {   // crosses midnight
+      covered.fill(1, s.startMin, 1440);
+      covered.fill(1, 0, s.endMin);
+    } else {
+      covered.fill(1, s.startMin, s.endMin);
+    }
+  }
+
+  // Find uncovered gaps → Mom
+  const momShifts = [];
+  let gapStart = null;
+  for (let m = 0; m <= 1440; m++) {
+    const uncov = m < 1440 ? !covered[m] : false;
+    if (uncov && gapStart === null) gapStart = m;
+    else if (!uncov && gapStart !== null) {
+      momShifts.push({ worker:'Mom', type:'mom', startMin:gapStart, endMin:m,
+                       startFmt:minToFmt(gapStart), endFmt:minToFmt(m) });
+      gapStart = null;
+    }
+  }
+
+  // Merge & sort by start time
+  return [...raw, ...momShifts].sort((a, b) => a.startMin - b.startMin);
+}
+
+// ── Parse date cell (handles "Monday, January 5, 2026" or "2026-01-05 …") ─
+function parseDate(cell) {
+  if (!cell) return null;
+  // ISO-ish: 2026-01-05 …
+  let m = cell.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  // "Weekday, Month D, YYYY"
+  m = cell.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d+),\s*(\d{4})/);
+  if (m) return new Date(+m[3], MONTHS.indexOf(m[1]), +m[2]);
+  return null;
+}
+
+// ── Main fetch + render ─────────────────────────────────
+async function load() {
+  const directUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+  const url = `https://corsproxy.io/?url=${encodeURIComponent(directUrl)}`;
+  let text;
+  try {
+    const res = await fetch(url, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} — make sure the sheet is published as CSV (File → Share → Publish to web)`);
+    text = await res.text();
+  } catch(e) {
+    document.getElementById('statusMsg').innerHTML =
+      `<span style="color:#c0392b;max-width:500px;text-align:center">
+       ⚠ Could not load schedule.<br><small>${e.message}</small></span>`;
+    return;
+  }
+
+  const rows = parseCSV(text);
+  const DAY_RE = /Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday/;
+
+  // Deduplicate: keep last occurrence of each date
+  const dateMap = new Map();
+  for (const row of rows) {
+    const cell = row[COL.date] || '';
+    const dt = parseDate(cell);
+    if (!dt || dt.getFullYear() !== 2026) continue;
+    dateMap.set(dt.toISOString().slice(0,10), { dt, row });
+  }
+
+  // Group by month
+  const byMonth = {};
+  for (const [iso, { dt, row }] of [...dateMap.entries()].sort()) {
+    const mn = MONTHS[dt.getMonth()];
+    if (!byMonth[mn]) byMonth[mn] = [];
+    byMonth[mn].push({ dt, shifts: buildShifts(row) });
+  }
+
+  // Update header meta
+  document.getElementById('hdMeta').innerHTML =
+    `<b>Live</b> — updates when spreadsheet changes<br>
+     Last loaded: ${new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}`;
+
+  renderNav(byMonth);
+  renderCalendar(byMonth);
+
+  document.getElementById('statusMsg').style.display  = 'none';
+  document.getElementById('calWrap').style.display    = 'block';
+}
+
+// ── Render month nav ────────────────────────────────────
+function renderNav(byMonth) {
+  const nav = document.getElementById('mNav');
+  Object.keys(byMonth).forEach((mn, i) => {
+    const b = document.createElement('button');
+    b.className = 'mbtn' + (i === 0 ? ' active' : '');
+    b.textContent = mn;
+    b.onclick = () => {
+      document.querySelectorAll('.mbtn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      document.getElementById('m-'+mn)?.scrollIntoView({ behavior:'smooth', block:'start' });
+    };
+    nav.appendChild(b);
+  });
+}
+
+// ── Render calendar ─────────────────────────────────────
+function renderCalendar(byMonth) {
+  const wrap = document.getElementById('calWrap');
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  for (const mn of Object.keys(byMonth)) {
+    const days = byMonth[mn];
+    const year  = days[0].dt.getFullYear();
+    const month = days[0].dt.getMonth();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+    const startDow    = new Date(year, month, 1).getDay();
+
+    // date-number → shifts
+    const dayMap = {};
+    for (const { dt, shifts } of days) dayMap[dt.getDate()] = shifts;
+
+    const sec = document.createElement('div');
+    sec.className = 'month-sec'; sec.id = 'm-'+mn;
+
+    const h2 = document.createElement('h2');
+    h2.className = 'month-h'; h2.textContent = `${mn} ${year}`;
+    sec.appendChild(h2);
+
+    // DOW header
+    const hdr = document.createElement('div'); hdr.className = 'week-hdr';
+    DOWS.forEach(d => { const el=document.createElement('div'); el.className='dh'; el.textContent=d; hdr.appendChild(el); });
+    sec.appendChild(hdr);
+
+    const totalCells = Math.ceil((startDow + daysInMonth) / 7) * 7;
+    let row = null;
+
+    for (let i = 0; i < totalCells; i++) {
+      if (i % 7 === 0) { row = document.createElement('div'); row.className='week-row'; sec.appendChild(row); }
+      const dayNum = i - startDow + 1;
+      const cell   = document.createElement('div');
+
+      if (i < startDow || dayNum > daysInMonth) {
+        cell.className = 'dc empty';
+      } else {
+        const cellDate = new Date(year, month, dayNum);
+        const isToday  = cellDate.getTime() === today.getTime();
+        const shifts   = dayMap[dayNum] || [];
+        cell.className = 'dc' + (isToday ? ' today' : '') + (shifts.length === 0 ? ' quiet' : '');
+
+        // Day number
+        const numDiv = document.createElement('div'); numDiv.className = 'dnum';
+        numDiv.appendChild(document.createTextNode(dayNum));
+        if (isToday) {
+          const b = document.createElement('span'); b.className='today-badge'; b.textContent='TODAY';
+          numDiv.appendChild(b);
+        }
+        cell.appendChild(numDiv);
+
+        // Shift pills
+        for (const s of shifts) {
+          const pill = document.createElement('div');
+          pill.className = `pill ${s.type}`;
+
+          // Row 1: time range
+          const timeRow = document.createElement('span');
+          timeRow.className = 'pill-time';
+          timeRow.textContent = `${s.startFmt}–${s.endFmt}`;
+          pill.appendChild(timeRow);
+
+          // Row 2: indented name + IHSS/FCSN label
+          const whoRow = document.createElement('span');
+          whoRow.className = 'pill-who';
+          whoRow.appendChild(document.createTextNode(s.worker));
+
+          if (s.type !== 'mac' && s.type !== 'mom') {
+            const lbl = document.createElement('span');
+            lbl.className = 'pill-label';
+            lbl.textContent = s.type.toUpperCase();
+            whoRow.appendChild(lbl);
+          }
+          pill.appendChild(whoRow);
+          cell.appendChild(pill);
+        }
+      }
+      row.appendChild(cell);
+    }
+    wrap.appendChild(sec);
+  }
+
+  // Scroll spy
+  const obs = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        const mn = e.target.id.replace('m-','');
+        document.querySelectorAll('.mbtn').forEach(b => b.classList.toggle('active', b.textContent===mn));
+      }
+    }
+  }, { rootMargin:'-25% 0px -65% 0px' });
+  document.querySelectorAll('[id^="m-"]').forEach(el => obs.observe(el));
+}
+
+// ── Boot ────────────────────────────────────────────────
+load();
+</script>
+</body>
+</html>
